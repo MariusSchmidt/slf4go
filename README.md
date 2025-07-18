@@ -3,6 +3,7 @@
 [![Go Version](https://img.shields.io/badge/Go-1.23-blue.svg)](https://go.dev/dl/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/github/v/tag/MariusSchmidt/slf4go?label=Version)](https://github.com/MariusSchmidt/slf4go/releases)
+[![codecov](https://codecov.io/gh/IhrUsername/slf4go/branch/main/graph/badge.svg)](https://codecov.io/gh/IhrUsername/slf4go)
 
 SLF4GO is a Simple Logging Facade for Go, inspired by [Java's SLF4J](https://github.com/qos-ch/slf4j). It provides a clean, flexible, and extensible logging abstraction that decouples your application code from specific logging implementations.
 
