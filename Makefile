@@ -51,7 +51,7 @@ run_tests: # Runs all available unit tests
 
 
 show_version: # Displays the version of this module
-	@cat version.txt && printf "\n"
+	@git describe --tags --abbrev=0 2>/dev/null || echo "keine Version gefunden"
 
 all: clean generate_mocks run_static_checks run_tests # Runs all targets
 

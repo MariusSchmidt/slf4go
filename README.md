@@ -2,7 +2,7 @@
 
 [![Go Version](https://img.shields.io/badge/Go-1.23-blue.svg)](https://go.dev/dl/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)](https://github.com/MariusSchmidt/slf4go)
+[![Version](https://img.shields.io/github/v/tag/MariusSchmidt/slf4go?label=Version)](https://github.com/MariusSchmidt/slf4go/releases)
 
 SLF4GO is a Simple Logging Facade for Go, inspired by [Java's SLF4J](https://github.com/qos-ch/slf4j). It provides a clean, flexible, and extensible logging abstraction that decouples your application code from specific logging implementations.
 
@@ -23,9 +23,9 @@ By using SLF4GO, you can write code that logs messages without being tied to a s
 
 The following runtimes and tools are required to build and run this software:
 
-| Requirements | Version | Installation                    |
-|--------------|---------|--------------------------------|
-| Golang       | `1.23`  | See [Golang](https://go.dev/dl/) |
+| Requirements | Version  | Installation                    |
+|--------------|----------|--------------------------------|
+| Golang       | `>=1.23` | See [Golang](https://go.dev/dl/) |
 
 ## Installation
 
