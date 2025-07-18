@@ -45,8 +45,8 @@ run_static_checks: # Runs static code analysis
 run_tests: # Runs all available unit tests
 	@echo "\n$(BOLD)$(BLUE)🔬 Running tests...$(RESET)"
 	@mkdir -p $(DIR_REPORTS)
-	$(GO) test -v -cover -coverpkg=./... -coverprofile=$(DIR_REPORTS)/coverage.txt -covermode=atomic ./...
-	$(GO) tool cover -html=$(DIR_REPORTS)/coverage.txt -o $(DIR_REPORTS)/coverage.html
+	$(GO) test -v -cover -coverpkg=./... -coverprofile=$(DIR_REPORTS)/coverage.out -covermode=atomic ./...
+	$(GO) tool cover -html=$(DIR_REPORTS)/coverage.out -o $(DIR_REPORTS)/coverage.html
 	@echo "$(GREEN)✓ Tests completed$(RESET)"
 
 
