@@ -184,30 +184,6 @@ func (mr *MockSlf4GoLoggerMockRecorder) Infof(arg0 interface{}, arg1 ...interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Infof", reflect.TypeOf((*MockSlf4GoLogger)(nil).Infof), varargs...)
 }
 
-// Log mocks base method.
-func (m *MockSlf4GoLogger) Log(arg0 slf4go_api.LogLevel, arg1 string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Log", arg0, arg1)
-}
-
-// Log indicates an expected call of Log.
-func (mr *MockSlf4GoLoggerMockRecorder) Log(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Log", reflect.TypeOf((*MockSlf4GoLogger)(nil).Log), arg0, arg1)
-}
-
-// LogWithTags mocks base method.
-func (m *MockSlf4GoLogger) LogWithTags(arg0 slf4go_api.LogLevel, arg1 slf4go_api.LogTags, arg2 string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "LogWithTags", arg0, arg1, arg2)
-}
-
-// LogWithTags indicates an expected call of LogWithTags.
-func (mr *MockSlf4GoLoggerMockRecorder) LogWithTags(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LogWithTags", reflect.TypeOf((*MockSlf4GoLogger)(nil).LogWithTags), arg0, arg1, arg2)
-}
-
 // LogWithTagsf mocks base method.
 func (m *MockSlf4GoLogger) LogWithTagsf(arg0 slf4go_api.LogLevel, arg1 slf4go_api.LogTags, arg2 string, arg3 ...interface{}) {
 	m.ctrl.T.Helper()

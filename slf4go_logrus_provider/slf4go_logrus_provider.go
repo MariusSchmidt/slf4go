@@ -12,8 +12,8 @@ type Slf4GoLogrusLogger struct {
 	componentTagLabel string
 }
 
-// New creates a new logger with optional configurations
-func New(logrusLogger *logrus.Logger) slf4go_api.Slf4GoLogger {
+// New creates a new slf4GoLogrusLogger with optional configurations
+func New(logrusLogger *logrus.Logger) *Slf4GoLogrusLogger {
 	return &Slf4GoLogrusLogger{
 		logger:            logrusLogger,
 		appComponent:      "",
@@ -49,147 +49,141 @@ func (l *Slf4GoLogrusLogger) WithStaticTags(tags slf4go_api.LogTags) slf4go_api.
 	}
 }
 
-func (l *Slf4GoLogrusLogger) Log(level slf4go_api.LogLevel, message string) {
-	l.LogWithTagsf(level, slf4go_api.LogTags{}, message)
+func (l *Slf4GoLogrusLogger) Logf(level slf4go_api.LogLevel, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(level, slf4go_api.LogTags{}, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Logf(level slf4go_api.LogLevel, messageTemplate string, args ...interface{}) {
-	l.LogWithTagsf(level, slf4go_api.LogTags{}, messageTemplate, args...)
-}
-
-func (l *Slf4GoLogrusLogger) logrusLogf(level logrus.Level, messageTemplate string, args ...interface{}) {
+func (l *Slf4GoLogrusLogger) logrusLogf(level logrus.Level, msgTemplate string, args ...interface{}) {
 	switch level {
-	case logrus.PanicLevel:
-		l.logger.Panicf(messageTemplate, args...)
 	case logrus.FatalLevel:
-		l.logger.Fatalf(messageTemplate, args...)
+		l.logger.Fatalf(msgTemplate, args...)
+	case logrus.PanicLevel:
+		l.logger.Panicf(msgTemplate, args...)
 	case logrus.ErrorLevel:
-		l.logger.Errorf(messageTemplate, args...)
+		l.logger.Errorf(msgTemplate, args...)
 	case logrus.WarnLevel:
-		l.logger.Warnf(messageTemplate, args...)
+		l.logger.Warnf(msgTemplate, args...)
 	case logrus.InfoLevel:
-		l.logger.Infof(messageTemplate, args...)
+		l.logger.Infof(msgTemplate, args...)
 	case logrus.DebugLevel:
-		l.logger.Debugf(messageTemplate, args...)
+		l.logger.Debugf(msgTemplate, args...)
 	case logrus.TraceLevel:
-		l.logger.WithFields(logrus.Fields{}).Tracef(messageTemplate, args...)
+		l.logger.WithFields(logrus.Fields{}).Tracef(msgTemplate, args...)
 	}
 }
 
-func (l *Slf4GoLogrusLogger) logrusLogWithTagsf(level logrus.Level, fields logrus.Fields, format string, args ...interface{}) {
+func (l *Slf4GoLogrusLogger) logrusLogWithTagsf(level logrus.Level, fields logrus.Fields, msgTemplate string, args ...interface{}) {
 	entry := l.logger.WithFields(fields)
 	switch level {
-	case logrus.PanicLevel:
-		entry.Panicf(format, args...)
 	case logrus.FatalLevel:
-		entry.Fatalf(format, args...)
+		entry.Fatalf(msgTemplate, args...)
+	case logrus.PanicLevel:
+		entry.Panicf(msgTemplate, args...)
 	case logrus.ErrorLevel:
-		entry.Errorf(format, args...)
+		entry.Errorf(msgTemplate, args...)
 	case logrus.WarnLevel:
-		entry.Warnf(format, args...)
+		entry.Warnf(msgTemplate, args...)
 	case logrus.InfoLevel:
-		entry.Infof(format, args...)
+		entry.Infof(msgTemplate, args...)
 	case logrus.DebugLevel:
-		entry.Debugf(format, args...)
+		entry.Debugf(msgTemplate, args...)
 	case logrus.TraceLevel:
-		entry.Tracef(format, args...)
+		entry.Tracef(msgTemplate, args...)
 	}
 }
 
-func (l *Slf4GoLogrusLogger) LogWithTags(level slf4go_api.LogLevel, fields slf4go_api.LogTags, message string) {
-	l.LogWithTagsf(level, fields, message)
-}
-
-func (l *Slf4GoLogrusLogger) LogWithTagsf(level slf4go_api.LogLevel, tags slf4go_api.LogTags, messageTemplate string, args ...interface{}) {
+func (l *Slf4GoLogrusLogger) LogWithTagsf(level slf4go_api.LogLevel, tags slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
 	logrusLevel, err := logrus.ParseLevel(level.Stringer())
 	if err != nil {
 		l.logger.Errorf("Mapping error level '%s' onto Logrus error level failed. Not logging event", level.Stringer())
 		return
 	}
-	combineTags(l.tags, tags)
-	if len(l.appComponent) == 0 && len(l.tags) == 0 {
-		l.logrusLogf(logrusLevel, messageTemplate, args...)
+	tags = combineTags(l.tags, tags)
+	if len(l.appComponent) == 0 && len(tags) == 0 {
+		l.logrusLogf(logrusLevel, msgTemplate, args...)
 	}
-	if len(l.appComponent) == 0 && len(l.tags) >= 1 {
-		l.logrusLogWithTagsf(logrusLevel, logrus.Fields(l.tags), messageTemplate, args...)
+	if len(l.appComponent) == 0 && len(tags) >= 1 {
+		l.logrusLogWithTagsf(logrusLevel, logrus.Fields(tags), msgTemplate, args...)
 	}
-	if len(l.appComponent) >= 1 && len(l.tags) == 0 {
-		l.logrusLogWithTagsf(logrusLevel, logrus.Fields{l.componentTagLabel: l.appComponent}, messageTemplate, args...)
+	if len(l.appComponent) >= 1 && len(tags) == 0 {
+		l.logrusLogWithTagsf(logrusLevel, logrus.Fields{l.componentTagLabel: l.appComponent}, msgTemplate, args...)
 	}
-	if len(l.appComponent) >= 1 && len(l.tags) >= 1 {
-		tagsAsLogrusFields := combineTags(l.tags, slf4go_api.LogTags{l.componentTagLabel: l.appComponent})
-		l.logrusLogWithTagsf(logrusLevel, logrus.Fields(tagsAsLogrusFields), messageTemplate, args...)
+	if len(l.appComponent) >= 1 && len(tags) >= 1 {
+		tagsAsLogrusFields := combineTags(tags, slf4go_api.LogTags{l.componentTagLabel: l.appComponent})
+		l.logrusLogWithTagsf(logrusLevel, logrus.Fields(tagsAsLogrusFields), msgTemplate, args...)
 	}
 }
 
-func combineTags(t1 slf4go_api.LogTags, t2 slf4go_api.LogTags) slf4go_api.LogTags {
-	merged := t1
-	for k, v := range t2 {
-		merged[k] = v
+func combineTags(tags ...slf4go_api.LogTags) slf4go_api.LogTags {
+	merged := make(slf4go_api.LogTags)
+	for _, m := range tags {
+		for k, v := range m {
+			merged[k] = v
+		}
 	}
 	return merged
 }
 
-func (l *Slf4GoLogrusLogger) Tracef(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Trace, format, args...)
+func (l *Slf4GoLogrusLogger) Tracef(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Trace, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Debugf(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Debug, format, args...)
+func (l *Slf4GoLogrusLogger) Debugf(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Debug, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Infof(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Info, format, args...)
+func (l *Slf4GoLogrusLogger) Infof(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Info, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Warnf(format string, args ...interface{}) {
-	l.Warningf(format, args...)
+func (l *Slf4GoLogrusLogger) Warnf(msgTemplate string, args ...interface{}) {
+	l.Warningf(msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Warningf(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Warn, format, args...)
+func (l *Slf4GoLogrusLogger) Warningf(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Warn, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Errorf(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Error, format, args...)
+func (l *Slf4GoLogrusLogger) Errorf(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Error, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Panicf(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Panic, format, args...)
+func (l *Slf4GoLogrusLogger) Panicf(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Panic, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) Fatalf(format string, args ...interface{}) {
-	l.Logf(slf4go_api.Fatal, format, args...)
+func (l *Slf4GoLogrusLogger) Fatalf(msgTemplate string, args ...interface{}) {
+	l.Logf(slf4go_api.Fatal, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) TraceWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Trace, fields, format, args...)
+func (l *Slf4GoLogrusLogger) TraceWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Trace, fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) DebugWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Debug, fields, format, args...)
+func (l *Slf4GoLogrusLogger) DebugWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Debug, fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) InfoWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Info, fields, format, args...)
+func (l *Slf4GoLogrusLogger) InfoWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Info, fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) WarnWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.WarningWithTagsf(fields, format, args...)
+func (l *Slf4GoLogrusLogger) WarnWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.WarningWithTagsf(fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) WarningWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Warn, fields, format, args...)
+func (l *Slf4GoLogrusLogger) WarningWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Warn, fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) ErrorWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Error, fields, format, args...)
+func (l *Slf4GoLogrusLogger) ErrorWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Error, fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) PanicWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Panic, fields, format, args...)
+func (l *Slf4GoLogrusLogger) PanicWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Panic, fields, msgTemplate, args...)
 }
 
-func (l *Slf4GoLogrusLogger) FatalWithTagsf(fields slf4go_api.LogTags, format string, args ...interface{}) {
-	l.LogWithTagsf(slf4go_api.Fatal, fields, format, args...)
+func (l *Slf4GoLogrusLogger) FatalWithTagsf(fields slf4go_api.LogTags, msgTemplate string, args ...interface{}) {
+	l.LogWithTagsf(slf4go_api.Fatal, fields, msgTemplate, args...)
 }

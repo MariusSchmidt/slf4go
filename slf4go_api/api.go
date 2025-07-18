@@ -84,51 +84,45 @@ type Slf4GoLogger interface {
 	// that will be added to every log entry.
 	WithStaticTags(tags LogTags) Slf4GoLogger
 
-	// Log logs a message with the specified level and formatted text.
-	Log(level LogLevel, message string)
-
 	// Logf logs a message with the specified level and formatted text.
-	Logf(level LogLevel, format string, args ...interface{})
-
-	// LogWithTags logs a message with the specified level, additional tags, and formatted text.
-	LogWithTags(level LogLevel, tags LogTags, message string)
+	Logf(level LogLevel, msgTemplate string, args ...interface{})
 
 	// LogWithTagsf logs a message with the specified level, additional tags, and formatted text.
 	LogWithTagsf(level LogLevel, tags LogTags, messageTemplate string, args ...interface{})
 
 	// Fatalf logs critical errors using the specified format and arguments, then terminates the program.
-	Fatalf(format string, args ...interface{})
+	Fatalf(msgTemplate string, args ...interface{})
 	// Panicf logs severe errors using the specified format and arguments, then panics.
-	Panicf(format string, args ...interface{})
+	Panicf(msgTemplate string, args ...interface{})
 	// Errorf logs errors using the specified format and arguments.
-	Errorf(format string, args ...interface{})
+	Errorf(msgTemplate string, args ...interface{})
 	// Warnf logs warnings using the specified format and arguments.
-	Warnf(format string, args ...interface{})
+	Warnf(msgTemplate string, args ...interface{})
 	// Warningf is an alias for Warnf that logs warnings using the specified format and arguments.
-	Warningf(format string, args ...interface{})
+	Warningf(msgTemplate string, args ...interface{})
 	// Infof logs general information using the specified format and arguments.
-	Infof(format string, args ...interface{})
+	Infof(msgTemplate string, args ...interface{})
 	// Debugf logs debug information using the specified format and arguments.
-	Debugf(format string, args ...interface{})
+	Debugf(msgTemplate string, args ...interface{})
 	// Tracef logs very detailed debug information using the specified format and arguments.
-	Tracef(format string, args ...interface{})
+	Tracef(msgTemplate string, args ...interface{})
 
 	// FatalWithTagsf logs a fatal message with additional tags using the specified format and arguments, then terminates
-	FatalWithTagsf(tags LogTags, format string, args ...interface{})
+	FatalWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// PanicWithTagsf logs a panic message with additional tags using the specified format and arguments, then panics
-	PanicWithTagsf(tags LogTags, format string, args ...interface{})
+	PanicWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// ErrorWithTagsf logs an error message with additional tags using the specified format and arguments
-	ErrorWithTagsf(tags LogTags, format string, args ...interface{})
+	ErrorWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// WarnWithTagsf logs a warning message with additional tags using the specified format and arguments
-	WarnWithTagsf(tags LogTags, format string, args ...interface{})
+	WarnWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// WarningWithTagsf is an alias for WarnWithTagsf that logs a warning message with additional tags
-	WarningWithTagsf(tags LogTags, format string, args ...interface{})
+	WarningWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// InfoWithTagsf logs an info message with additional tags using the specified format and arguments
-	InfoWithTagsf(tags LogTags, format string, args ...interface{})
+	InfoWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// DebugWithTagsf logs a debug message with additional tags using the specified format and arguments
-	DebugWithTagsf(tags LogTags, format string, args ...interface{})
+	DebugWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 	// TraceWithTagsf logs a trace message with additional tags using the specified format and arguments
-	TraceWithTagsf(tags LogTags, format string, args ...interface{})
+	TraceWithTagsf(tags LogTags, msgTemplate string, args ...interface{})
 }
 
 // AppComponent represents a significant component of the application to be mentioned in logs.
