@@ -136,6 +136,20 @@ func (mr *MockSlf4GoLoggerMockRecorder) Fatalf(arg0 interface{}, arg1 ...interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Fatalf", reflect.TypeOf((*MockSlf4GoLogger)(nil).Fatalf), varargs...)
 }
 
+// ForComponent mocks base method.
+func (m *MockSlf4GoLogger) ForComponent(arg0 slf4go_api.AppComponent) slf4go_api.Slf4GoLogger {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ForComponent", arg0)
+	ret0, _ := ret[0].(slf4go_api.Slf4GoLogger)
+	return ret0
+}
+
+// ForComponent indicates an expected call of ForComponent.
+func (mr *MockSlf4GoLoggerMockRecorder) ForComponent(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ForComponent", reflect.TypeOf((*MockSlf4GoLogger)(nil).ForComponent), arg0)
+}
+
 // InfoWithTagsf mocks base method.
 func (m *MockSlf4GoLogger) InfoWithTagsf(arg0 slf4go_api.LogTags, arg1 string, arg2 ...interface{}) {
 	m.ctrl.T.Helper()
@@ -168,6 +182,30 @@ func (mr *MockSlf4GoLoggerMockRecorder) Infof(arg0 interface{}, arg1 ...interfac
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{arg0}, arg1...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Infof", reflect.TypeOf((*MockSlf4GoLogger)(nil).Infof), varargs...)
+}
+
+// Log mocks base method.
+func (m *MockSlf4GoLogger) Log(arg0 slf4go_api.LogLevel, arg1 string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Log", arg0, arg1)
+}
+
+// Log indicates an expected call of Log.
+func (mr *MockSlf4GoLoggerMockRecorder) Log(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Log", reflect.TypeOf((*MockSlf4GoLogger)(nil).Log), arg0, arg1)
+}
+
+// LogWithTags mocks base method.
+func (m *MockSlf4GoLogger) LogWithTags(arg0 slf4go_api.LogLevel, arg1 slf4go_api.LogTags, arg2 string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "LogWithTags", arg0, arg1, arg2)
+}
+
+// LogWithTags indicates an expected call of LogWithTags.
+func (mr *MockSlf4GoLoggerMockRecorder) LogWithTags(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LogWithTags", reflect.TypeOf((*MockSlf4GoLogger)(nil).LogWithTags), arg0, arg1, arg2)
 }
 
 // LogWithTagsf mocks base method.
@@ -340,16 +378,30 @@ func (mr *MockSlf4GoLoggerMockRecorder) Warningf(arg0 interface{}, arg1 ...inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Warningf", reflect.TypeOf((*MockSlf4GoLogger)(nil).Warningf), varargs...)
 }
 
-// WithDefaultTags mocks base method.
-func (m *MockSlf4GoLogger) WithDefaultTags(arg0 slf4go_api.LogTags) slf4go_api.Slf4GoLogger {
+// WithAppComponentLabel mocks base method.
+func (m *MockSlf4GoLogger) WithAppComponentLabel(arg0 string) slf4go_api.Slf4GoLogger {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "WithDefaultTags", arg0)
+	ret := m.ctrl.Call(m, "WithAppComponentLabel", arg0)
 	ret0, _ := ret[0].(slf4go_api.Slf4GoLogger)
 	return ret0
 }
 
-// WithDefaultTags indicates an expected call of WithDefaultTags.
-func (mr *MockSlf4GoLoggerMockRecorder) WithDefaultTags(arg0 interface{}) *gomock.Call {
+// WithAppComponentLabel indicates an expected call of WithAppComponentLabel.
+func (mr *MockSlf4GoLoggerMockRecorder) WithAppComponentLabel(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithDefaultTags", reflect.TypeOf((*MockSlf4GoLogger)(nil).WithDefaultTags), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithAppComponentLabel", reflect.TypeOf((*MockSlf4GoLogger)(nil).WithAppComponentLabel), arg0)
+}
+
+// WithStaticTags mocks base method.
+func (m *MockSlf4GoLogger) WithStaticTags(arg0 slf4go_api.LogTags) slf4go_api.Slf4GoLogger {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithStaticTags", arg0)
+	ret0, _ := ret[0].(slf4go_api.Slf4GoLogger)
+	return ret0
+}
+
+// WithStaticTags indicates an expected call of WithStaticTags.
+func (mr *MockSlf4GoLoggerMockRecorder) WithStaticTags(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStaticTags", reflect.TypeOf((*MockSlf4GoLogger)(nil).WithStaticTags), arg0)
 }

@@ -64,18 +64,37 @@ func (level LogLevel) Stringer() string {
 	}
 }
 
+// DefaultAppComponentTag defines the default key for component tags in log entries
+const DefaultAppComponentTag string = "appComponent"
+
 // Slf4GoLogger defines an interface for structured logging.
 // It supports various log levels and the ability to add additional tags to log entries.
 type Slf4GoLogger interface {
-	// WithDefaultTags creates a new Slf4GoLogger instance with predefined tags
+	// ForComponent creates a new Slf4GoLogger instance that will include the specified component
+	// in all log entries. The component will be logged under the DefaultAppComponentTag key.
+	// The returned logger inherits all other properties from the original logger.
+	ForComponent(component AppComponent) Slf4GoLogger
+
+	// WithAppComponentLabel creates a new Slf4GoLogger instance with a custom tag label for the component.
+	// The component will be logged under the specified tag label instead of DefaultAppComponentTag.
+	// The returned logger inherits all other properties from the original logger.
+	WithAppComponentLabel(appComponentLabel string) Slf4GoLogger
+
+	// WithStaticTags creates a new Slf4GoLogger instance with predefined tags
 	// that will be added to every log entry.
-	WithDefaultTags(tags LogTags) Slf4GoLogger
+	WithStaticTags(tags LogTags) Slf4GoLogger
+
+	// Log logs a message with the specified level and formatted text.
+	Log(level LogLevel, message string)
 
 	// Logf logs a message with the specified level and formatted text.
 	Logf(level LogLevel, format string, args ...interface{})
 
+	// LogWithTags logs a message with the specified level, additional tags, and formatted text.
+	LogWithTags(level LogLevel, tags LogTags, message string)
+
 	// LogWithTagsf logs a message with the specified level, additional tags, and formatted text.
-	LogWithTagsf(level LogLevel, tags LogTags, format string, args ...interface{})
+	LogWithTagsf(level LogLevel, tags LogTags, messageTemplate string, args ...interface{})
 
 	// Fatalf logs critical errors using the specified format and arguments, then terminates the program.
 	Fatalf(format string, args ...interface{})
